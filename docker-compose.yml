@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  hikayeapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hikayeapp-backend
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: "local"
+      # SQLite database will be created inside container
+      DATABASE_URL: "sqlite:///./hikayeapp.db"
+    volumes:
+      - .:/app
+    command: >
+      sh -c "poetry install --no-root &&
+             uvicorn hikayeapp_backend.main:app --host 0.0.0.0 --port 8000 --reload"
+
+# Optional: comment out Postgres section
+#  postgres:
+#    image: postgres:15
+#    environment:
+#      POSTGRES_USER: user
+#      POSTGRES_PASSWORD: password
+#      POSTGRES_DB: hikaye
+#    ports:
+#      - "5432:5432"

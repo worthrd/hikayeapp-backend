@@ -1,0 +1,38 @@
+
+# Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+
+# macOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Environment variables
+.env
+.env.*
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# IDE/editor folders
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Mypy / Pyright / Coverage
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Poetry
+# (do NOT ignore poetry.lock)
