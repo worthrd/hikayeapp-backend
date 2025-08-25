@@ -23,14 +23,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-
-      - name: Create and start virtual environment
-        run: |
-          python -m venv venv
-          source venv/bin/activate
       
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Configure Poetry
+        run: poetry config virtualenvs.create false  # install to system site-packages
+
+      - name: Install dependencies with Poetry
+        run: poetry install --no-interaction --no-root
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -68,4 +69,5 @@ jobs:
         with:
           app-name: 'hikayeapp-backend'
           slot-name: 'Production'
+
           
