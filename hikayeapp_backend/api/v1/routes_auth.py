@@ -50,8 +50,8 @@ def login_user(user_login: UserRead, session: Session = Depends(get_session)):
 
     query = select(User).where(User.email == user_login.email)
     user = session.exec(query).first()
-
-    if not user or AuthService.verify_password(user_login.password, user.hashed_password):
+    print(user)
+    if not user or not AuthService.verify_password(user_login.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
