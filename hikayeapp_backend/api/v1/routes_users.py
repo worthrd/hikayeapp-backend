@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
-from sqlmodel import Session, select
-from typing import List
+from sqlmodel import Session, select, SQLModel
+from typing import List, Optional
 
 from hikayeapp_backend.database import get_session
 from hikayeapp_backend.models.user import User
@@ -8,6 +8,27 @@ from hikayeapp_backend.services.auth_service import AuthService
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
+class ChildRead(SQLModel):
+    id: int
+    name: str
+    age: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserRead(SQLModel):
+    id: int
+    email: str
+    name: Optional[str]
+    surname: Optional[str]
+    subscribed: bool
+    story_read: int
+    story_listened: int
+    children: List[ChildRead] = []
+
+    class Config:
+        orm_mode = True
 
 @router.get("/", response_model=List[User])
 def list_users(session: Session = Depends(get_session), current_user: User = Depends(AuthService.get_current_user)):
@@ -15,7 +36,7 @@ def list_users(session: Session = Depends(get_session), current_user: User = Dep
     return users
 
 
-@router.get("/me", response_model=User)
+@router.get("/me", response_model=UserRead)
 def get_me(current_user: User = Depends(AuthService.get_current_user)):
     return current_user
 

@@ -8,7 +8,7 @@ from hikayeapp_backend.schemas.child import ChildCreate, ChildUpdate
 class ChildService:
     @staticmethod
     def create_child(session: Session, child_in: ChildCreate, current_user: User) -> Child:
-        child = Child(**child_in.dict(), user_id = current_user.id)
+        child = Child(**child_in.dict())
         session.add(child)
         session.commit()
         session.refresh(child)

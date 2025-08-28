@@ -10,6 +10,8 @@ from hikayeapp_backend.config import settings
 from hikayeapp_backend.models.user import User
 from hikayeapp_backend.database import get_session
 
+from hikayeapp_backend.schemas.user import UserOut
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
@@ -61,6 +63,6 @@ class AuthService:
         user = session.exec(select(User).where(User.id == int(user_id))).first()
         if user is None:
             raise credential_exception
-        
-        request.state.user = user
+       
+        request.state.user = UserOut.validate(user)
         return user

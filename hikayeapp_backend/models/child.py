@@ -16,5 +16,6 @@ class Child(SQLModel, table = True):
     stories: List["Story"] = Relationship(back_populates="child")
     avatar: Optional[bytes] = None
     user_id: int = Field(foreign_key="user.id")
+    user: Optional["User"] = Relationship(back_populates="children")
     created_at: datetime = Field(default_factory = datetime.utcnow)
     updated_at: datetime = Field(default_factory = datetime.utcnow)

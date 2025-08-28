@@ -1,5 +1,5 @@
-from sqlmodel import SQLModel, Field
-from typing import Optional
+from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional, List
 from datetime import datetime
 
 
@@ -12,6 +12,7 @@ class User(SQLModel, table = True):
     avatar: Optional[bytes] = None
     story_read: int = 0
     story_listened: int = 0
+    children: List["Child"] = Relationship(back_populates="user")
     hashed_password: str = Field(nullable=False)
     created_at: datetime = Field(default_factory = datetime.utcnow)
     updated_at: datetime = Field(default_factory = datetime.utcnow)
