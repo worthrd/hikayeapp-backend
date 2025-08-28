@@ -1,7 +1,8 @@
-from typing import Optional
+from typing import Optional, Annotated
 from pydantic import BaseModel, EmailStr
 
 from fastapi import APIRouter, Depends, HTTPException, status, Form
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 
 from hikayeapp_backend.database import get_session
@@ -47,9 +48,10 @@ def register_user(user_create: UserCreate, session: Session = Depends(get_sessio
 
 
 @router.post("/login")
-def login_user(user_login: UserRead, session: Session = Depends(get_session)):
+def login_user(user_login: Annotated[OAuth2PasswordRequestForm, Depends()], 
+               session: Session = Depends(get_session)):
 
-    query = select(User).where(User.email == user_login.email)
+    query = select(User).where(User.email == user_login.username)
     user = session.exec(query).first()
 
     if not user or not AuthService.verify_password(user_login.password, user.hashed_password):

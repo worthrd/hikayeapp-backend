@@ -6,8 +6,13 @@ from hikayeapp_backend.core.routes.story import router as story_router
 
 from hikayeapp_backend.core.middleware.logging_middleware import LoggingMiddleware
 from hikayeapp_backend.core.middleware.exception_middleware import ExceptionLoggingMiddleware
+from fastapi.security import OAuth2PasswordBearer
+
 
 app = FastAPI(title = "HikayeApp Backend", version = "1.0.0")
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+
 
 @app.on_event("startup")
 def on_startup():

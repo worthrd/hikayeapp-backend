@@ -4,6 +4,7 @@ from typing import Optional
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status, Request
+from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session, select
 
 from hikayeapp_backend.config import settings
@@ -14,6 +15,7 @@ from hikayeapp_backend.schemas.user import UserOut
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+oauth2_schema = OAuth2PasswordBearer(tokenUrl = "/api/v1/auth/login")
 
 class AuthService:
     @staticmethod
@@ -43,7 +45,8 @@ class AuthService:
         return encoded_jwt
 
     @staticmethod
-    def get_current_user(request: Request, token: str, session: Session = Depends(get_session)) -> User:
+    def get_current_user(request: Request, token: str = Depends(oauth2_schema), 
+                         session: Session = Depends(get_session)) -> User:
         credential_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
