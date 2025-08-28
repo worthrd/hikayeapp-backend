@@ -41,8 +41,9 @@ def register_user(user_create: UserCreate, session: Session = Depends(get_sessio
     session.add(user)
     session.commit()
     session.refresh(user)
-
-    return {"msg": "User registered successfully", "user_id": user.id}
+        
+    token = AuthService.create_access_token({"sub": str(user.id)})
+    return {"access_token": token, "token_type": "bearer"}
 
 
 @router.post("/login")
@@ -50,7 +51,7 @@ def login_user(user_login: UserRead, session: Session = Depends(get_session)):
 
     query = select(User).where(User.email == user_login.email)
     user = session.exec(query).first()
-    print(user)
+
     if not user or not AuthService.verify_password(user_login.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
