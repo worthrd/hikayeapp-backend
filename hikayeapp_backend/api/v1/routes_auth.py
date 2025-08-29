@@ -29,7 +29,7 @@ def register_user(user_create: UserCreate, session: Session = Depends(get_sessio
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Email already registered",
+            detail="Email zaten kayıtlı!",
         )
 
     hashed_password = AuthService.get_password_hash(user_create.password)
