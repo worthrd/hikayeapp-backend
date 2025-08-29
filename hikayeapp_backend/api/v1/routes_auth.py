@@ -28,7 +28,7 @@ def register_user(user_create: UserCreate, session: Session = Depends(get_sessio
     existing_user = session.exec(query).first()
     if existing_user:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_409_CONFLICT,
             detail="Email already registered",
         )
 
